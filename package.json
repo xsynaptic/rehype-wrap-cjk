@@ -1,0 +1,43 @@
+{
+  "name": "rehype-wrap-cjk",
+  "version": "0.0.1",
+  "description": "Rehype plugin for wrapping CJK characters in a span element with a language attribute.",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xsynaptic/remark-wrap-cjk.git"
+  },
+  "keywords": [
+    "unified",
+    "rehype",
+    "rehype-plugin"
+  ],
+  "author": "Alexander Synaptic",
+  "bugs": {
+    "url": "https://github.com/xsynaptic/remark-wrap-cjk/issues"
+  },
+  "homepage": "https://github.com/xsynaptic/remark-wrap-cjk#readme",
+  "license": "MIT",
+  "dependencies": {
+    "hast-util-is-element": "^3.0.0",
+    "hastscript": "^8.0.0",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/hast": "^3.0.3",
+    "@types/jest": "^29.5.11",
+    "@types/unist": "^3.0.2",
+    "prettier": "^3.1.1",
+    "rehype-stringify": "^10.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.0.0",
+    "typescript": "^5.3.3",
+    "unified": "^11.0.4",
+    "vfile": "^6.0.1",
+    "vitest": "^1.1.0"
+  }
+}

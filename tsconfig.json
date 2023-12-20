@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": ["dom", "es2020"],
+    "module": "Node16",
+    "strict": true,
+    "declaration": true,
+    "sourceMap": true,
+    "noImplicitReturns": true,
+    "outDir": "dist/esm"
+  },
+  "include": ["src/index.ts"]
+}
