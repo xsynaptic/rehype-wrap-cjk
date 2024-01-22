@@ -9,11 +9,13 @@ import type { Visitor, VisitorResult } from 'unist-util-visit';
 import { unicodeCjkRanges } from './unicodeCjkRanges.js';
 
 interface RehypeCjkOptions {
+  element: string;
   langCode: string;
   regex: RegExp;
 }
 
 const DEFAULT_SETTINGS: RehypeCjkOptions = {
+  element: 'span',
   langCode: 'zh',
   regex: new RegExp(`[${Object.values(unicodeCjkRanges).join('')}]+`, 'gud'),
 };
@@ -30,7 +32,7 @@ export const plugin: Plugin<[RehypeCjkOptions?], Root> = (options) => {
       isElement(
         parent,
         ({ tagName, properties }) =>
-          tagName === 'span' && properties?.lang === settings.langCode
+          tagName === settings.element && properties?.lang === settings.langCode
       )
     )
       return;
@@ -48,7 +50,7 @@ export const plugin: Plugin<[RehypeCjkOptions?], Root> = (options) => {
           value: node.value.slice(lastIndex, matchIndex),
         });
       }
-      parts.push(h('span', { lang: settings.langCode }, [match[0]]));
+      parts.push(h(settings.element, { lang: settings.langCode }, [match[0]]));
       lastIndex = matchIndex + match[0].length;
     }
 
