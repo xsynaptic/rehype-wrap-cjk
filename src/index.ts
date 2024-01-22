@@ -2,7 +2,7 @@ import { h } from 'hastscript';
 import { isElement } from 'hast-util-is-element';
 import { visit } from 'unist-util-visit';
 
-import type { Root, Text } from 'hast';
+import type { Root, Text, Element } from 'hast';
 import type { Plugin, Transformer } from 'unified';
 import type { Visitor, VisitorResult } from 'unist-util-visit';
 
@@ -35,9 +35,9 @@ export const plugin: Plugin<[RehypeCjkOptions?], Root> = (options) => {
     )
       return;
 
-    const parts = [];
+    const parts: (Element | Text)[] = [];
     let lastIndex = 0;
-    let match;
+    let match: RegExpExecArray | null;
 
     while ((match = settings.regex.exec(node.value)) !== null) {
       const { index: matchIndex } = match;

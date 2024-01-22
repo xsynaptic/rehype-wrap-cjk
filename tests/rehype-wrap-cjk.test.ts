@@ -15,9 +15,8 @@ const compiler = unified()
   .use(plugin)
   .use(rehypeStringify);
 
-const process = async (contents: VFileCompatible): Promise<VFileCompatible> => {
-  return compiler.process(contents).then((file) => file.value);
-};
+const process = async (contents: VFileCompatible): Promise<VFileCompatible> =>
+  compiler.process(contents).then(({ value }) => value);
 
 const markdownText = [
   [
@@ -33,12 +32,12 @@ const markdownText = [
     '<p>Sample text with CJK characters (<span lang="zh">中日韓字符</span>) interspersed. <span lang="zh">中文</span> can appear anywhere in the text and will be appropriately wrapped.</p>',
   ],
   [
-    'Sample text with CJK characters already wrapped: <span lang="zh">中日韓字符</span>...',
-    '<p>Sample text with CJK characters already wrapped: <span lang="zh">中日韓字符</span>...</p>',
+    'Sample text with CJK characters already wrapped: <span lang="zh">中日韓字符</span>... and some that is not: 中日韓字符',
+    '<p>Sample text with CJK characters already wrapped: <span lang="zh">中日韓字符</span>... and some that is not: <span lang="zh">中日韓字符</span></p>',
   ],
 ];
 
-describe('rehype wrap CJK plugin', () => {
+describe('rehype wrap CJK plugin input matches expected output', () => {
   for (const [input, output] of markdownText) {
     test(input, async () => {
       expect(process(input)).resolves.toEqual(output);
