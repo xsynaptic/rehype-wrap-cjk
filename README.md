@@ -1,6 +1,6 @@
 # rehype-wrap-cjk
 
-This package is a [unified][]/[rehype][] plugin to wrap [CJK character][cjk-wiki] sequences in a `span` element with a `lang` attribute, useful for applying different CSS styling rules in multilingual contexts.
+This package is a [unified][]/[rehype][] plugin to wrap [CJK character][cjk-wiki] sequences in an element (defaulting to `span`) with a `lang` attribute, useful for applying different CSS styling rules in multilingual contexts.
 
 ## Install
 

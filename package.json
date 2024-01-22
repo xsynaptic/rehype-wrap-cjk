@@ -1,7 +1,7 @@
 {
   "name": "rehype-wrap-cjk",
   "version": "0.0.1",
-  "description": "Rehype plugin for wrapping CJK characters in a span element with a language attribute.",
+  "description": "Rehype plugin for wrapping CJK characters in an element with a language attribute.",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
@@ -9,12 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xsynaptic/rehype-wrap-cjk.git"
+    "url": "git+https://github.com/xsynaptic/rehype-wrap-cjk.git"
   },
   "keywords": [
     "unified",
     "rehype",
-    "rehype-plugin"
+    "rehype-plugin",
+    "cjk"
   ],
   "author": "Alexander Synaptic <x@spectralcodex.com>",
   "bugs": {
