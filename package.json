@@ -9,18 +9,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xsynaptic/remark-wrap-cjk.git"
+    "url": "https://github.com/xsynaptic/rehype-wrap-cjk.git"
   },
   "keywords": [
     "unified",
     "rehype",
     "rehype-plugin"
   ],
-  "author": "Alexander Synaptic",
+  "author": "Alexander Synaptic <x@spectralcodex.com>",
   "bugs": {
-    "url": "https://github.com/xsynaptic/remark-wrap-cjk/issues"
+    "url": "https://github.com/xsynaptic/rehype-wrap-cjk/issues"
   },
-  "homepage": "https://github.com/xsynaptic/remark-wrap-cjk#readme",
+  "homepage": "https://github.com/xsynaptic/rehype-wrap-cjk#readme",
   "license": "MIT",
   "dependencies": {
     "hast-util-is-element": "^3.0.0",
