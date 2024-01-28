@@ -7,12 +7,12 @@ import rehypeStringify from 'rehype-stringify';
 
 import type { VFileCompatible } from 'vfile';
 
-import plugin from '../src';
+import rehypeWrapCjk from '../src';
 
 const processor = unified()
   .use(remarkParse)
   .use(remarkRehype)
-  .use(plugin)
+  .use(rehypeWrapCjk)
   .use(rehypeStringify);
 
 const process = async (contents: VFileCompatible): Promise<VFileCompatible> =>
