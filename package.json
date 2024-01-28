@@ -1,6 +1,6 @@
 {
   "name": "rehype-wrap-cjk",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Rehype plugin for wrapping CJK characters in an element with a language attribute.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
