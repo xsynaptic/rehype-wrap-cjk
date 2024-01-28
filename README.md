@@ -2,6 +2,8 @@
 
 This package is a [unified][]/[rehype][] plugin to wrap [CJK character][cjk-wiki] sequences in an element (defaulting to `span`) with a `lang` attribute, useful for applying different CSS styling rules in multilingual contexts.
 
+Note: this plugin is distributed in ESM only.
+
 ## Install
 
 ```sh
@@ -33,13 +35,13 @@ export function processMarkdown(markdownContent: string): string {
 }
 ```
 
-Example input:
+Example plain text input:
 
 ```text
 Sample text with CJK characters (中日韓字符) interspersed. 中文 can appear anywhere in the text and will be appropriately wrapped.
 ```
 
-Example output: 
+Example HTML output: 
 
 ```html
 Sample text with CJK characters (<span lang="zh">中日韓字符</span>) interspersed. <span lang="zh">中文</span> can appear anywhere in the text and will be appropriately wrapped.

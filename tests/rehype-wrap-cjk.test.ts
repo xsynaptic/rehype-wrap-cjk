@@ -9,14 +9,14 @@ import type { VFileCompatible } from 'vfile';
 
 import plugin from '../src';
 
-const compiler = unified()
+const processor = unified()
   .use(remarkParse)
   .use(remarkRehype)
   .use(plugin)
   .use(rehypeStringify);
 
 const process = async (contents: VFileCompatible): Promise<VFileCompatible> =>
-  compiler.process(contents).then(({ value }) => value);
+  processor.process(contents).then(({ value }) => value);
 
 const markdownText = [
   [

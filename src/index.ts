@@ -27,7 +27,7 @@ export const plugin: Plugin<[RehypeCjkOptions?], Root> = (options) => {
     if (!parent || index === undefined || typeof node.value !== 'string')
       return;
 
-    // Avoid recursion by exiting early if the parent is already a `span` element
+    // Exit early if this node already has a language attribute
     if (
       isElement(
         parent,
