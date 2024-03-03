@@ -3,7 +3,7 @@ import { isElement } from 'hast-util-is-element';
 import { visit } from 'unist-util-visit';
 
 import type { Root, Text, Element } from 'hast';
-import type { Plugin } from 'unified';
+import type { Plugin, Transformer } from 'unified';
 
 import { unicodeCjkRanges } from './unicodeCjkRanges.js';
 
@@ -24,7 +24,7 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
 ) => {
   const settings = Object.assign({}, DEFAULT_SETTINGS, options);
 
-  return (tree) => {
+  const transformer: Transformer<Root> = (tree) => {
     visit(tree, 'text', function visitor(node, index, parent) {
       if (!parent || index === undefined || typeof node.value !== 'string')
         return;
@@ -68,6 +68,8 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
 
     return tree;
   };
+
+  return transformer;
 };
 
 export default rehypeWrapCjk;
