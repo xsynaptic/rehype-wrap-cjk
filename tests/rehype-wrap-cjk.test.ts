@@ -1,13 +1,12 @@
-import { describe, expect, test } from 'vitest';
-
-import { unified } from 'unified';
+import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
-import rehypeStringify from 'rehype-stringify';
+import { unified } from 'unified';
+import { describe, expect, test } from 'vitest';
 
 import type { VFileCompatible } from 'vfile';
 
-import rehypeWrapCjk from '../src';
+import rehypeWrapCjk from '../src/index.js';
 
 const processor = unified()
   .use(remarkParse)
@@ -40,7 +39,7 @@ const markdownText = [
 describe('rehype wrap CJK plugin input matches expected output', () => {
   for (const [input, output] of markdownText) {
     test(input, async () => {
-      expect(process(input)).resolves.toEqual(output);
+      await expect(process(input)).resolves.toEqual(output);
     });
   }
 });

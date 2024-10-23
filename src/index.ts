@@ -1,11 +1,11 @@
-import { h } from 'hastscript';
 import { isElement } from 'hast-util-is-element';
+import { h } from 'hastscript';
 import { visit } from 'unist-util-visit';
 
-import type { Root, Text, Element } from 'hast';
+import type { Element, Root, Text } from 'hast';
 import type { Plugin, Transformer } from 'unified';
 
-import { unicodeCjkRanges } from './unicodeCjkRanges.js';
+import { unicodeCjkRanges } from './unicode-cjk-ranges.js';
 
 interface RehypeWrapCjkOptions {
   element: string;
@@ -22,7 +22,11 @@ const DEFAULT_SETTINGS: RehypeWrapCjkOptions = {
 export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
   options
 ) => {
-  const settings = Object.assign({}, DEFAULT_SETTINGS, options);
+  const settings: RehypeWrapCjkOptions = Object.assign(
+    {},
+    DEFAULT_SETTINGS,
+    options
+  );
 
   const transformer: Transformer<Root> = (tree) => {
     visit(tree, 'text', function visitor(node, index, parent) {
@@ -34,8 +38,7 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
         isElement(
           parent,
           ({ tagName, properties }) =>
-            tagName === settings.element &&
-            properties?.lang === settings.langCode
+            tagName === settings.element && !!properties.lang
         )
       )
         return;
