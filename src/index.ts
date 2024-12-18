@@ -16,7 +16,7 @@ interface RehypeWrapCjkOptions {
 const DEFAULT_SETTINGS: RehypeWrapCjkOptions = {
   element: 'span',
   langCode: 'zh',
-  regex: new RegExp(`[${Object.values(unicodeCjkRanges).join('')}]+`, 'gud'),
+  regex: new RegExp(`[${unicodeCjkRanges.join('')}]+`, 'gud'),
 };
 
 export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
@@ -28,7 +28,7 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
     options
   );
 
-  const transformer: Transformer<Root> = (tree) => {
+  function transformer(tree: Root) {
     visit(tree, 'text', function visitor(node, index, parent) {
       if (!parent || index === undefined || typeof node.value !== 'string')
         return;
@@ -70,9 +70,9 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
     });
 
     return tree;
-  };
+  }
 
-  return transformer;
+  return transformer satisfies Transformer<Root>;
 };
 
 export default rehypeWrapCjk;
