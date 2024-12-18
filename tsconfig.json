@@ -7,8 +7,9 @@
     "declaration": true,
     "sourceMap": true,
     "noImplicitReturns": true,
+    "skipLibCheck": true,
     "outDir": "dist"
   },
   "exclude": ["node_modules/"],
-  "include": ["src"]
+  "include": ["src", "./*.ts"]
 }
