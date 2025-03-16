@@ -1,6 +1,6 @@
 {
   "name": "rehype-wrap-cjk",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Rehype plugin for wrapping CJK characters in an HTML element with a language attribute.",
   "exports": {
     ".": {
@@ -28,7 +28,7 @@
     "check-types": "tsc --project tsconfig.json --noemit",
     "lint": "eslint",
     "test": "vitest",
-    "prepublish": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "repository": {
     "type": "git",
@@ -52,12 +52,12 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^9.22.0",
     "@types/eslint__js": "^8.42.3",
     "@types/hast": "^3.0.4",
     "@types/jest": "^29.5.14",
     "@types/unist": "^3.0.3",
-    "eslint": "^9.21.0",
+    "eslint": "^9.22.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unicorn": "^56.0.1",
     "globals": "^15.15.0",
@@ -67,10 +67,10 @@
     "remark-rehype": "^11.1.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.0",
+    "typescript-eslint": "^8.26.1",
     "unified": "^11.0.5",
     "vfile": "^6.0.3",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.8"
   },
-  "packageManager": "pnpm@9.12.2+sha256.2ef6e547b0b07d841d605240dce4d635677831148cd30f6d564b8f4f928f73d2"
+  "packageManager": "pnpm@10.6.3+sha512.bb45e34d50a9a76e858a95837301bfb6bd6d35aea2c5d52094fa497a467c43f5c440103ce2511e9e0a2f89c3d6071baac3358fc68ac6fb75e2ceb3d2736065e6"
 }
