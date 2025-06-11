@@ -53,7 +53,7 @@ const config = tseslint.config(
       'simple-import-sort/exports': 'warn',
     },
   },
-  unicornPlugin.configs['flat/recommended'],
+  unicornPlugin.configs.recommended,
   {
     rules: {
       'unicorn/filename-case': [

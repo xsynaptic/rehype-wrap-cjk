@@ -8,6 +8,7 @@
     "sourceMap": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
+    "erasableSyntaxOnly": true,
     "outDir": "dist"
   },
   "exclude": ["node_modules/"],
