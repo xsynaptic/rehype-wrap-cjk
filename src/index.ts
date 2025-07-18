@@ -5,21 +5,31 @@ import { visit } from 'unist-util-visit';
 import type { Element, Root, Text } from 'hast';
 import type { Plugin, Transformer } from 'unified';
 
-import { unicodeCjkRanges } from './unicode-cjk-ranges.js';
+import {
+  unicodeJaRanges,
+  unicodeKoRanges,
+  unicodeZhRanges,
+} from './unicode-cjk-ranges.js';
 
 interface RehypeWrapCjkOptions {
   element: string;
   langCode: string;
-  regex: RegExp;
+  regex: RegExp | undefined;
 }
 
 const DEFAULT_SETTINGS: RehypeWrapCjkOptions = {
   element: 'span',
   langCode: 'zh',
-  regex: new RegExp(`[${unicodeCjkRanges.join('')}]+`, 'gud'),
+  regex: undefined,
 };
 
-export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
+const cjkRegexMap = {
+  zh: new RegExp(`[${unicodeZhRanges.join('')}]+`, 'gud'),
+  ja: new RegExp(`[${unicodeJaRanges.join('')}]+`, 'gud'),
+  ko: new RegExp(`[${unicodeKoRanges.join('')}]+`, 'gud'),
+};
+
+export const rehypeWrapCjk: Plugin<[Partial<RehypeWrapCjkOptions>?], Root> = (
   options
 ) => {
   const settings: RehypeWrapCjkOptions = Object.assign(
@@ -27,6 +37,11 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
     DEFAULT_SETTINGS,
     options
   );
+
+  const regex =
+    (settings.regex ?? ['zh', 'ja', 'ko'].includes(settings.langCode))
+      ? cjkRegexMap[settings.langCode as keyof typeof cjkRegexMap]
+      : cjkRegexMap.zh;
 
   function transformer(tree: Root) {
     visit(tree, 'text', function visitor(node, index, parent) {
@@ -47,7 +62,7 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
       let lastIndex = 0;
       let match: RegExpExecArray | null;
 
-      while ((match = settings.regex.exec(node.value)) !== null) {
+      while ((match = regex.exec(node.value)) !== null) {
         const { index: matchIndex } = match;
 
         if (matchIndex > lastIndex) {

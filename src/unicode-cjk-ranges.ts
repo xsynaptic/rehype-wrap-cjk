@@ -22,7 +22,23 @@ export const cjkCompatibilityIdeographsSupplement = String.raw`\u{2F800}-\u{2FA1
 export const halfWidthAndFullWidthForms = String.raw`\uFF00-\uFFEF`;
 export const verticalForms = String.raw`\uFE10-\uFE1F`;
 
-export const unicodeCjkRanges = [
+// Japanese-specific character ranges
+export const hiragana = String.raw`\u3041-\u3093`;
+export const hiraganaIterationMarks = String.raw`\u309D-\u309E`;
+export const katakana = String.raw`\u30A1-\u30F6`;
+export const katakanaPunctuation = String.raw`\u30FB-\u30FE`;
+export const japanesePunctuation = String.raw`\u3001-\u3003`;
+export const ideographicIterationMark = String.raw`\u3005`;
+export const japaneseBrackets = String.raw`\u3008-\u3011`;
+export const tortoiseBrackets = String.raw`\u3014-\u3015`;
+export const waveDash = String.raw`\u301C`;
+
+// Korean-specific character ranges
+export const hangulJamo = String.raw`\u3131-\u314E`;
+export const hangulSyllables = String.raw`\uAC00-\uD7A3`;
+
+// Chinese character ranges
+export const unicodeZhRanges = [
   cjkUnifiedIdeographs,
   cjkUnifiedIdeographsExtensionA,
   cjkUnifiedIdeographsExtensionB,
@@ -46,4 +62,59 @@ export const unicodeCjkRanges = [
   cjkCompatibilityIdeographsSupplement,
   halfWidthAndFullWidthForms,
   verticalForms,
+] satisfies string[];
+
+// Japanese character ranges
+export const unicodeJaRanges = [
+  cjkUnifiedIdeographs,
+  cjkUnifiedIdeographsExtensionA,
+  cjkUnifiedIdeographsExtensionB,
+  cjkUnifiedIdeographsExtensionC,
+  cjkUnifiedIdeographsExtensionD,
+  cjkUnifiedIdeographsExtensionE,
+  cjkUnifiedIdeographsExtensionF,
+  cjkUnifiedIdeographsExtensionG,
+  cjkUnifiedIdeographsExtensionH,
+  cjkUnifiedIdeographsExtensionI,
+  kangxiRadicals,
+  ideographicDescriptionCharacters,
+  cjkSymbolsAndPunctuation,
+  cjkStrokes,
+  enclosedCjkLettersAndMonths,
+  cjkCompatibility,
+  cjkCompatibilityIdeographs,
+  cjkCompatibilityForms,
+  hiragana,
+  hiraganaIterationMarks,
+  katakana,
+  katakanaPunctuation,
+  japanesePunctuation,
+  ideographicIterationMark,
+  japaneseBrackets,
+  tortoiseBrackets,
+  waveDash,
+] satisfies string[];
+
+// Korean character ranges
+export const unicodeKoRanges = [
+  cjkUnifiedIdeographs,
+  cjkUnifiedIdeographsExtensionA,
+  cjkUnifiedIdeographsExtensionB,
+  cjkUnifiedIdeographsExtensionC,
+  cjkUnifiedIdeographsExtensionD,
+  cjkUnifiedIdeographsExtensionE,
+  cjkUnifiedIdeographsExtensionF,
+  cjkUnifiedIdeographsExtensionG,
+  cjkUnifiedIdeographsExtensionH,
+  cjkUnifiedIdeographsExtensionI,
+  kangxiRadicals,
+  ideographicDescriptionCharacters,
+  cjkSymbolsAndPunctuation,
+  cjkStrokes,
+  enclosedCjkLettersAndMonths,
+  cjkCompatibility,
+  cjkCompatibilityIdeographs,
+  cjkCompatibilityForms,
+  hangulJamo,
+  hangulSyllables,
 ] satisfies string[];
