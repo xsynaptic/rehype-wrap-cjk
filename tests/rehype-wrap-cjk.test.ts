@@ -8,12 +8,6 @@ import type { VFileCompatible } from 'vfile';
 
 import rehypeWrapCjk from '../src/index.js';
 
-const defaultProcessor = unified()
-  .use(remarkParse)
-  .use(remarkRehype)
-  .use(rehypeWrapCjk)
-  .use(rehypeStringify);
-
 const chineseProcessor = unified()
   .use(remarkParse)
   .use(remarkRehype)
@@ -32,10 +26,11 @@ const koreanProcessor = unified()
   .use(rehypeWrapCjk, { langCode: 'ko' })
   .use(rehypeStringify);
 
-const processDefault = async (
-  contents: VFileCompatible
-): Promise<VFileCompatible> =>
-  defaultProcessor.process(contents).then(({ value }) => value);
+const cjkProcessor = unified()
+  .use(remarkParse)
+  .use(remarkRehype)
+  .use(rehypeWrapCjk, { langCode: 'cjk' })
+  .use(rehypeStringify);
 
 const processChinese = async (
   contents: VFileCompatible
@@ -51,6 +46,11 @@ const processKorean = async (
   contents: VFileCompatible
 ): Promise<VFileCompatible> =>
   koreanProcessor.process(contents).then(({ value }) => value);
+
+const processCjk = async (
+  contents: VFileCompatible
+): Promise<VFileCompatible> =>
+  cjkProcessor.process(contents).then(({ value }) => value);
 
 const chineseMarkdownText = [
   [
@@ -117,13 +117,21 @@ const koreanMarkdownText = [
   ],
 ];
 
-describe('rehype wrap CJK plugin for Chinese characters (default)', () => {
-  for (const [input, output] of chineseMarkdownText) {
-    test(`Chinese: ${input}`, async () => {
-      await expect(processDefault(input)).resolves.toEqual(output);
-    });
-  }
-});
+const cjkMarkdownText = [
+  [
+    'Sample text with CJK characters (中日韓字符) interspersed. 中文 can appear anywhere in the text.',
+    '<p>Sample text with CJK characters (<span lang="cjk">中日韓字符</span>) interspersed. <span lang="cjk">中文</span> can appear anywhere in the text.</p>',
+  ],
+  [
+    'Hello こんにちは world',
+    '<p>Hello <span lang="cjk">こんにちは</span> world</p>',
+  ],
+  ['Hello 안녕 world', '<p>Hello <span lang="cjk">안녕</span> world</p>'],
+  [
+    'Combined text sample with Chinese (中日韓字符), Japanese (こんにちは), and Korean (안녕).',
+    '<p>Combined text sample with Chinese (<span lang="cjk">中日韓字符</span>), Japanese (<span lang="cjk">こんにちは</span>), and Korean (<span lang="cjk">안녕</span>).</p>',
+  ],
+];
 
 describe('rehype wrap CJK plugin for Chinese characters', () => {
   for (const [input, output] of chineseMarkdownText) {
@@ -145,6 +153,14 @@ describe('rehype wrap CJK plugin for Korean characters', () => {
   for (const [input, output] of koreanMarkdownText) {
     test(`Korean: ${input}`, async () => {
       await expect(processKorean(input)).resolves.toEqual(output);
+    });
+  }
+});
+
+describe('rehype wrap CJK plugin for CJK characters', () => {
+  for (const [input, output] of cjkMarkdownText) {
+    test(`CJK: ${input}`, async () => {
+      await expect(processCjk(input)).resolves.toEqual(output);
     });
   }
 });
