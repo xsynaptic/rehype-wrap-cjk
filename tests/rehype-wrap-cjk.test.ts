@@ -6,7 +6,7 @@ import { describe, expect, test } from 'vitest';
 
 import type { VFileCompatible } from 'vfile';
 
-import rehypeWrapCjk from '../src/index.js';
+import rehypeWrapCjk from '../src/index.ts';
 
 const chineseProcessor = unified()
   .use(remarkParse)
@@ -135,15 +135,15 @@ const cjkMarkdownText = [
 
 describe('rehype wrap CJK plugin for Chinese characters', () => {
   for (const [input, output] of chineseMarkdownText) {
-    test(`Chinese: ${input}`, async () => {
+    test(`Chinese: ${String(input)}`, async () => {
       await expect(processChinese(input)).resolves.toEqual(output);
     });
   }
 });
 
-describe('rehype wrap CJK plugin for Japanese charactes', () => {
+describe('rehype wrap CJK plugin for Japanese characters', () => {
   for (const [input, output] of japaneseMarkdownText) {
-    test(`Japanese: ${input}`, async () => {
+    test(`Japanese: ${String(input)}`, async () => {
       await expect(processJapanese(input)).resolves.toEqual(output);
     });
   }
@@ -151,7 +151,7 @@ describe('rehype wrap CJK plugin for Japanese charactes', () => {
 
 describe('rehype wrap CJK plugin for Korean characters', () => {
   for (const [input, output] of koreanMarkdownText) {
-    test(`Korean: ${input}`, async () => {
+    test(`Korean: ${String(input)}`, async () => {
       await expect(processKorean(input)).resolves.toEqual(output);
     });
   }
@@ -159,7 +159,7 @@ describe('rehype wrap CJK plugin for Korean characters', () => {
 
 describe('rehype wrap CJK plugin for CJK characters', () => {
   for (const [input, output] of cjkMarkdownText) {
-    test(`CJK: ${input}`, async () => {
+    test(`CJK: ${String(input)}`, async () => {
       await expect(processCjk(input)).resolves.toEqual(output);
     });
   }
