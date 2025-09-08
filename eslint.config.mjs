@@ -1,11 +1,12 @@
 // @ts-check -- ESLint still lacks support for config files in native TypeScript
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import unicornPlugin from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-const config = tseslint.config(
+const config = defineConfig(
   {
     ignores: ['**/node_modules', '**/dist', 'dist/**/*', '**/node_modules'],
   },
