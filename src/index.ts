@@ -1,9 +1,9 @@
+import type { Element, Root, Text } from 'hast';
+import type { Plugin, Transformer } from 'unified';
+
 import { isElement } from 'hast-util-is-element';
 import { h } from 'hastscript';
 import { visit } from 'unist-util-visit';
-
-import type { Element, Root, Text } from 'hast';
-import type { Plugin, Transformer } from 'unified';
 
 export interface RehypeWrapCjkOptions {
   element: string | undefined;

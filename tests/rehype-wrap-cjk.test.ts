@@ -1,10 +1,10 @@
+import type { VFileCompatible } from 'vfile';
+
 import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 import { describe, expect, test } from 'vitest';
-
-import type { VFileCompatible } from 'vfile';
 
 import rehypeWrapCjk from '../src/index.ts';
 

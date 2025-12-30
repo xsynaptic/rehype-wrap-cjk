@@ -1,8 +1,8 @@
 // @ts-check -- ESLint still lacks support for config files in native TypeScript
 import eslint from '@eslint/js';
-import { defineConfig } from 'eslint/config';
-import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
+import perfectionist from 'eslint-plugin-perfectionist';
 import unicornPlugin from 'eslint-plugin-unicorn';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -28,30 +28,16 @@ const config = defineConfig(
     },
     plugins: {
       '@typescript-eslint': tseslint.plugin,
-    },
-  },
-  {
-    plugins: {
-      'simple-import-sort': simpleImportSortPlugin,
+      perfectionist,
     },
     rules: {
-      'simple-import-sort/imports': [
-        'warn',
+      'perfectionist/sort-imports': [
+        'error',
         {
-          groups: [
-            [String.raw`^@?\w`], // External packages
-            [String.raw`^.*\u0000$`], // Type imports
-            [String.raw`^\u0000`], // Side effect imports
-            [String.raw`^\.\.(?!/?$)`, String.raw`^\.\./?$`], // Parent imports
-            [
-              String.raw`^\./(?=.*/)(?!/?$)`,
-              String.raw`^\.(?!/?$)`,
-              String.raw`^\./?$`,
-            ], // Other relative imports
-          ],
+          type: 'natural',
+          order: 'asc',
         },
       ],
-      'simple-import-sort/exports': 'warn',
     },
   },
   unicornPlugin.configs.recommended,
