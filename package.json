@@ -1,6 +1,6 @@
 {
   "name": "rehype-wrap-cjk",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Rehype plugin for wrapping CJK characters in an HTML element with a language attribute.",
   "exports": {
     ".": {
@@ -58,14 +58,12 @@
     "rehype-stringify": "^10.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "tsdown": "^0.20.0-beta.3",
+    "tsdown": "^0.19.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.0",
+    "unified": "^11.0.5",
     "vfile": "^6.0.3",
     "vitest": "^4.0.17"
-  },
-  "peerDependencies": {
-    "unified": "^11.0.5"
   },
   "packageManager": "pnpm@10.26.2+sha512.0e308ff2005fc7410366f154f625f6631ab2b16b1d2e70238444dd6ae9d630a8482d92a451144debc492416896ed16f7b114a86ec68b8404b2443869e68ffda6"
 }
