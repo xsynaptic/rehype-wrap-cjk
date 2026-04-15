@@ -1,5 +1,6 @@
 import type { VFileCompatible } from 'vfile';
 
+import rehypeParse from 'rehype-parse';
 import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -64,10 +65,6 @@ const chineseMarkdownText = [
   [
     'Sample text with CJK characters (中日韓字符) interspersed. 中文 can appear anywhere in the text.',
     '<p>Sample text with CJK characters (<span lang="zh">中日韓字符</span>) interspersed. <span lang="zh">中文</span> can appear anywhere in the text.</p>',
-  ],
-  [
-    'Sample text with CJK characters already wrapped: <span lang="zh">中日韓字符</span>... and some that is not: 中日韓字符',
-    '<p>Sample text with CJK characters already wrapped: <span lang="zh">中日韓字符</span>... and some that is not: <span lang="zh">中日韓字符</span></p>',
   ],
   ['你好', '<p><span lang="zh">你好</span></p>'],
   ['Hello 世界', '<p>Hello <span lang="zh">世界</span></p>'],
@@ -163,4 +160,77 @@ describe('rehype wrap CJK plugin for CJK characters', () => {
       await expect(processCjk(input)).resolves.toEqual(output);
     });
   }
+});
+
+const chineseHtmlProcessor = unified()
+  .use(rehypeParse, { fragment: true })
+  .use(rehypeWrapCjk, { langCode: 'zh' })
+  .use(rehypeStringify);
+
+const processChineseHtml = async (
+  contents: VFileCompatible
+): Promise<VFileCompatible> =>
+  chineseHtmlProcessor.process(contents).then(({ value }) => value);
+
+const chineseHtmlText = [
+  // Ancestor check: text inside a nested element within a lang-tagged ancestor
+  // must not be re-wrapped.
+  [
+    '<span lang="zh">中文 <em>斜體</em> 外</span>',
+    '<span lang="zh">中文 <em>斜體</em> 外</span>',
+  ],
+  // Skip tags: CJK inside <code> must not be wrapped; CJK outside is wrapped.
+  [
+    '外文 <code>內部</code> 外文',
+    '<span lang="zh">外文</span> <code>內部</code> <span lang="zh">外文</span>',
+  ],
+];
+
+describe('rehype wrap CJK plugin for HTML inputs', () => {
+  for (const [input, output] of chineseHtmlText) {
+    test(`HTML: ${String(input)}`, async () => {
+      await expect(processChineseHtml(input)).resolves.toEqual(output);
+    });
+  }
+});
+
+const processWith = async (
+  options: Parameters<typeof rehypeWrapCjk>[0],
+  input: string
+): Promise<VFileCompatible> =>
+  unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeWrapCjk, options)
+    .use(rehypeStringify)
+    .process(input)
+    .then(({ value }) => value);
+
+describe('rehype wrap CJK plugin option configuration', () => {
+  test('custom element, langAttribute, and langCode', async () => {
+    await expect(
+      processWith(
+        { element: 'em', langAttribute: 'data-lang', langCode: 'zh-Hans' },
+        '你好'
+      )
+    ).resolves.toEqual('<p><em data-lang="zh-Hans">你好</em></p>');
+  });
+
+  test('custom regex without g flag is normalized', async () => {
+    await expect(
+      processWith({ regex: /[你好]+/, langCode: 'zh' }, '你好 世界')
+    ).resolves.toEqual('<p><span lang="zh">你好</span> 世界</p>');
+  });
+
+  test('skipTags: [] disables default exclusions', async () => {
+    await expect(
+      processWith({ langCode: 'zh', skipTags: [] }, '`中文`')
+    ).resolves.toEqual('<p><code><span lang="zh">中文</span></code></p>');
+  });
+
+  test('fullwidth ASCII variants are wrapped', async () => {
+    await expect(
+      processWith({ langCode: 'zh' }, 'Hello Ａ１')
+    ).resolves.toEqual('<p>Hello <span lang="zh">Ａ１</span></p>');
+  });
 });

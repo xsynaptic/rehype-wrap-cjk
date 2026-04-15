@@ -57,6 +57,18 @@ html:not([lang^='zh']) span[lang^='zh'] {
 }
 ```
 
+## Options
+
+Pass options as the second argument to `.use(rehypeCjkWrap, { ... })`.
+
+- `element` (default `'span'`): wrapper element name.
+- `langAttribute` (default `'lang'`): attribute carrying the language code.
+- `langCode` (default `'cjk'`): value written to `langAttribute`. Also selects a preset regex when set to `'zh'`, `'ja'`, `'ko'`, or `'cjk'`.
+- `regex` (default derived from `langCode`): custom pattern. The `g` flag is added if missing.
+- `skipTags` (default `['code', 'pre', 'kbd', 'samp', 'script', 'style']`): elements whose descendants are left alone. Pass `[]` to disable.
+
+Text inside any ancestor that already declares the matching language is not wrapped.
+
 ## Reference
 
 - [CJK Unified Ideographs][cjk-unified-ideographs]
