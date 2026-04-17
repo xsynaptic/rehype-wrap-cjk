@@ -1,7 +1,7 @@
 {
   "name": "rehype-wrap-cjk",
-  "version": "1.1.0",
-  "description": "Rehype plugin for wrapping CJK characters in an HTML element with a language attribute.",
+  "version": "2.0.0",
+  "description": "Rehype plugin for wrapping CJK character sequences in an HTML element with a configurable attribute for styling or language tagging.",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",

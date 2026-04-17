@@ -6,13 +6,31 @@ import { visitParents } from 'unist-util-visit-parents';
 
 export interface RehypeWrapCjkOptions {
   element?: string;
-  langAttribute?: string;
-  langCode?: string;
+  attribute?: string;
+  value?: string;
   regex?: RegExp;
   skipTags?: string[];
 }
 
 const defaultSkipTags = ['code', 'pre', 'kbd', 'samp', 'script', 'style'];
+
+function isAncestorWrapped(
+  ancestor: Element,
+  attribute: string,
+  value: string
+): boolean {
+  if (attribute === 'class' || attribute === 'className') {
+    const classes = ancestor.properties['className'];
+
+    if (Array.isArray(classes)) return classes.includes(value);
+
+    if (typeof classes === 'string')
+      return classes.split(/\s+/).includes(value);
+
+    return false;
+  }
+  return ancestor.properties[attribute] === value;
+}
 
 /**
  * Script-based ranges using Unicode Script Extensions property
@@ -24,7 +42,7 @@ export const koScriptRange = String.raw`\p{scx=Hangul}\p{scx=Han}`;
 export const cjkScriptRange = String.raw`\p{scx=Han}\p{scx=Hiragana}\p{scx=Katakana}\p{scx=Hangul}\p{scx=Bopomofo}`;
 
 /**
- * Fullwidth ASCII variants (FF01-FF5E): digits,letters, punctuation
+ * Full-width ASCII variants (FF01-FF5E): digits,letters, punctuation
  * Not covered by script extensions but sometimes used in CJK contexts
  */
 export const fullwidthAsciiRange = String.raw`\uFF01-\uFF5E`;
@@ -41,16 +59,16 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
 ) => {
   const settings = {
     element: options?.element ?? 'span',
-    langAttribute: options?.langAttribute ?? 'lang',
-    langCode: options?.langCode ?? 'cjk',
+    attribute: options?.attribute ?? 'class',
+    value: options?.value ?? 'cjk',
     regex: options?.regex,
     skipTags: options?.skipTags ?? defaultSkipTags,
   };
 
   const baseRegex =
     settings.regex ??
-    (settings.langCode && settings.langCode in cjkRegexPresets
-      ? cjkRegexPresets[settings.langCode as keyof typeof cjkRegexPresets]
+    (settings.value in cjkRegexPresets
+      ? cjkRegexPresets[settings.value as keyof typeof cjkRegexPresets]
       : cjkRegexPresets.cjk);
 
   const regex = baseRegex.flags.includes('g')
@@ -73,12 +91,12 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
       )
         return;
 
-      // Skip if any ancestor already declares the target language
+      // Skip if any ancestor is already wrapped
       if (
         ancestors.some(
           (ancestor) =>
             ancestor.type === 'element' &&
-            ancestor.properties[settings.langAttribute] === settings.langCode
+            isAncestorWrapped(ancestor, settings.attribute, settings.value)
         )
       )
         return;
@@ -99,7 +117,7 @@ export const rehypeWrapCjk: Plugin<[RehypeWrapCjkOptions?], Root> = (
           });
         }
         parts.push(
-          h(settings.element, { [settings.langAttribute]: settings.langCode }, [
+          h(settings.element, { [settings.attribute]: settings.value }, [
             match[0],
           ])
         );

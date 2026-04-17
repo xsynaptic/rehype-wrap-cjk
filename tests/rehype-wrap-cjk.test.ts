@@ -12,25 +12,25 @@ import rehypeWrapCjk from '../src/index.ts';
 const chineseProcessor = unified()
   .use(remarkParse)
   .use(remarkRehype)
-  .use(rehypeWrapCjk, { langCode: 'zh' })
+  .use(rehypeWrapCjk, { attribute: 'lang', value: 'zh' })
   .use(rehypeStringify);
 
 const japaneseProcessor = unified()
   .use(remarkParse)
   .use(remarkRehype)
-  .use(rehypeWrapCjk, { langCode: 'ja' })
+  .use(rehypeWrapCjk, { attribute: 'lang', value: 'ja' })
   .use(rehypeStringify);
 
 const koreanProcessor = unified()
   .use(remarkParse)
   .use(remarkRehype)
-  .use(rehypeWrapCjk, { langCode: 'ko' })
+  .use(rehypeWrapCjk, { attribute: 'lang', value: 'ko' })
   .use(rehypeStringify);
 
 const cjkProcessor = unified()
   .use(remarkParse)
   .use(remarkRehype)
-  .use(rehypeWrapCjk, { langCode: 'cjk' })
+  .use(rehypeWrapCjk, { attribute: 'class', value: 'cjk' })
   .use(rehypeStringify);
 
 const processChinese = async (
@@ -117,16 +117,16 @@ const koreanMarkdownText = [
 const cjkMarkdownText = [
   [
     'Sample text with CJK characters (中日韓字符) interspersed. 中文 can appear anywhere in the text.',
-    '<p>Sample text with CJK characters (<span lang="cjk">中日韓字符</span>) interspersed. <span lang="cjk">中文</span> can appear anywhere in the text.</p>',
+    '<p>Sample text with CJK characters (<span class="cjk">中日韓字符</span>) interspersed. <span class="cjk">中文</span> can appear anywhere in the text.</p>',
   ],
   [
     'Hello こんにちは world',
-    '<p>Hello <span lang="cjk">こんにちは</span> world</p>',
+    '<p>Hello <span class="cjk">こんにちは</span> world</p>',
   ],
-  ['Hello 안녕 world', '<p>Hello <span lang="cjk">안녕</span> world</p>'],
+  ['Hello 안녕 world', '<p>Hello <span class="cjk">안녕</span> world</p>'],
   [
     'Combined text sample with Chinese (中日韓字符), Japanese (こんにちは), and Korean (안녕).',
-    '<p>Combined text sample with Chinese (<span lang="cjk">中日韓字符</span>), Japanese (<span lang="cjk">こんにちは</span>), and Korean (<span lang="cjk">안녕</span>).</p>',
+    '<p>Combined text sample with Chinese (<span class="cjk">中日韓字符</span>), Japanese (<span class="cjk">こんにちは</span>), and Korean (<span class="cjk">안녕</span>).</p>',
   ],
 ];
 
@@ -164,7 +164,7 @@ describe('rehype wrap CJK plugin for CJK characters', () => {
 
 const chineseHtmlProcessor = unified()
   .use(rehypeParse, { fragment: true })
-  .use(rehypeWrapCjk, { langCode: 'zh' })
+  .use(rehypeWrapCjk, { attribute: 'lang', value: 'zh' })
   .use(rehypeStringify);
 
 const processChineseHtml = async (
@@ -173,13 +173,12 @@ const processChineseHtml = async (
   chineseHtmlProcessor.process(contents).then(({ value }) => value);
 
 const chineseHtmlText = [
-  // Ancestor check: text inside a nested element within a lang-tagged ancestor
-  // must not be re-wrapped.
+  // Ancestor check: text inside a nested element within a lang-tagged ancestor must not be re-wrapped
   [
     '<span lang="zh">中文 <em>斜體</em> 外</span>',
     '<span lang="zh">中文 <em>斜體</em> 外</span>',
   ],
-  // Skip tags: CJK inside <code> must not be wrapped; CJK outside is wrapped.
+  // Skip tags: CJK inside <code> must not be wrapped; CJK outside is wrapped
   [
     '外文 <code>內部</code> 外文',
     '<span lang="zh">外文</span> <code>內部</code> <span lang="zh">外文</span>',
@@ -207,10 +206,10 @@ const processWith = async (
     .then(({ value }) => value);
 
 describe('rehype wrap CJK plugin option configuration', () => {
-  test('custom element, langAttribute, and langCode', async () => {
+  test('custom element, attribute, and value', async () => {
     await expect(
       processWith(
-        { element: 'em', langAttribute: 'data-lang', langCode: 'zh-Hans' },
+        { element: 'em', attribute: 'data-lang', value: 'zh-Hans' },
         '你好'
       )
     ).resolves.toEqual('<p><em data-lang="zh-Hans">你好</em></p>');
@@ -218,19 +217,61 @@ describe('rehype wrap CJK plugin option configuration', () => {
 
   test('custom regex without g flag is normalized', async () => {
     await expect(
-      processWith({ regex: /[你好]+/, langCode: 'zh' }, '你好 世界')
+      processWith(
+        { regex: /[你好]+/, attribute: 'lang', value: 'zh' },
+        '你好 世界'
+      )
     ).resolves.toEqual('<p><span lang="zh">你好</span> 世界</p>');
   });
 
   test('skipTags: [] disables default exclusions', async () => {
     await expect(
-      processWith({ langCode: 'zh', skipTags: [] }, '`中文`')
+      processWith({ attribute: 'lang', value: 'zh', skipTags: [] }, '`中文`')
     ).resolves.toEqual('<p><code><span lang="zh">中文</span></code></p>');
   });
 
   test('fullwidth ASCII variants are wrapped', async () => {
     await expect(
-      processWith({ langCode: 'zh' }, 'Hello Ａ１')
+      processWith({ attribute: 'lang', value: 'zh' }, 'Hello Ａ１')
     ).resolves.toEqual('<p>Hello <span lang="zh">Ａ１</span></p>');
+  });
+});
+
+const processHtmlWith = async (
+  options: Parameters<typeof rehypeWrapCjk>[0],
+  input: string
+): Promise<VFileCompatible> =>
+  unified()
+    .use(rehypeParse, { fragment: true })
+    .use(rehypeWrapCjk, options)
+    .use(rehypeStringify)
+    .process(input)
+    .then(({ value }) => value);
+
+describe('rehype wrap CJK plugin skip behavior', () => {
+  test('class attribute: wraps with class instead of lang', async () => {
+    await expect(
+      processWith({ attribute: 'class', value: 'cjk' }, 'Hello 中文')
+    ).resolves.toEqual('<p>Hello <span class="cjk">中文</span></p>');
+  });
+
+  test('class attribute: does not re-wrap own output', async () => {
+    await expect(
+      processHtmlWith(
+        { attribute: 'class', value: 'cjk' },
+        '<span class="cjk">中文</span>'
+      )
+    ).resolves.toEqual('<span class="cjk">中文</span>');
+  });
+
+  test('class attribute: does not skip on unrelated class', async () => {
+    await expect(
+      processHtmlWith(
+        { attribute: 'class', value: 'cjk' },
+        '<span class="foo">中文</span>'
+      )
+    ).resolves.toEqual(
+      '<span class="foo"><span class="cjk">中文</span></span>'
+    );
   });
 });

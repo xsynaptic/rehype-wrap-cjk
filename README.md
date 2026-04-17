@@ -1,8 +1,10 @@
 # rehype-wrap-cjk
 
-This package is a [unified][]/[rehype][] plugin to wrap [CJK character][cjk-wiki] sequences in an element (defaulting to `span`) with a `lang` attribute, useful for applying different CSS styling rules in multilingual contexts.
+This package is a [unified][]/[rehype][] plugin that wraps [CJK character][cjk-wiki] sequences in an element (defaulting to `span`) with a configurable attribute and value, useful for applying different CSS styling rules in multilingual contexts.
 
-Note: this plugin is distributed in ESM and CJS.
+By default it emits `<span class="cjk">...</span>` as a pure styling hook. To emit semantic `lang` tags instead, pass `attribute: 'lang'` together with a `value` such as `'zh'`, `'ja'`, or `'ko'`. Custom attribute names (e.g. `data-lang`) are also supported.
+
+*Note*: this plugin is distributed in ESM and CJS.
 
 ## Install
 
@@ -41,16 +43,16 @@ Example plain text input:
 Sample text with CJK characters (中日韓字符) interspersed. 中文 can appear anywhere in the text and will be appropriately wrapped.
 ```
 
-Example HTML output: 
+Example HTML output (default `class="cjk"` styling hook): 
 
 ```html
-Sample text with CJK characters (<span lang="zh">中日韓字符</span>) interspersed. <span lang="zh">中文</span> can appear anywhere in the text and will be appropriately wrapped.
+Sample text with CJK characters (<span class="cjk">中日韓字符</span>) interspersed. <span class="cjk">中文</span> can appear anywhere in the text and will be appropriately wrapped.
 ```
 
 Example CSS rules (for you to implement in your own projects):
 
 ```css
-html:not([lang^='zh']) span[lang^='zh'] {
+.cjk {
 	font-style: normal !important;
 	text-decoration: none !important;
 	word-break: keep-all !important;
@@ -62,12 +64,12 @@ html:not([lang^='zh']) span[lang^='zh'] {
 Pass options as the second argument to `.use(rehypeCjkWrap, { ... })`.
 
 - `element` (default `'span'`): wrapper element name.
-- `langAttribute` (default `'lang'`): attribute carrying the language code.
-- `langCode` (default `'cjk'`): value written to `langAttribute`. Also selects a preset regex when set to `'zh'`, `'ja'`, `'ko'`, or `'cjk'`.
-- `regex` (default derived from `langCode`): custom pattern. The `g` flag is added if missing.
+- `attribute` (default `'class'`): attribute written to the wrapper. Use `'lang'` for semantic language tagging, `'class'` for a styling hook, or any other attribute name (e.g. `'data-lang'`).
+- `value` (default `'cjk'`): value written to `attribute`. Also selects a preset regex when set to `'zh'`, `'ja'`, `'ko'`, or `'cjk'`.
+- `regex` (default derived from `value`): custom pattern. The `g` flag is added if missing.
 - `skipTags` (default `['code', 'pre', 'kbd', 'samp', 'script', 'style']`): elements whose descendants are left alone. Pass `[]` to disable.
 
-Text inside any ancestor that already declares the matching language is not wrapped.
+Text inside any ancestor that already carries the target `attribute`/`value` is not re-wrapped.
 
 ## Reference
 
